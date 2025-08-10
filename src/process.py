@@ -1,5 +1,5 @@
 from lib.prompt import change_prompt
-from lib.camera import viewport
+from lib.camera import draw_viewport
 from src.ui import draw_frame
 from src.ui import draw_hp_bar
 from src.ui import draw_inventory
@@ -27,12 +27,14 @@ def destroy_game():
     pass
 
 
+from lib.camera import obj1
+
 def draw_process():
     draw_frame()
     draw_hp_bar((18, 1), 3)
     draw_inventory((18, 3), *['->==>', '[DDD]', 'o--++', None])
     draw_actions((0, 9), "{'a'-left, 's'-down, 'w'-up, 'd'-right, 'dtw'-destroy this world}")
-    viewport((1, 1), (13, 7), *[player.get()])
+    draw_viewport((1, 1), (13, 7), obj1)
 
 
 def input_process(action):
@@ -42,9 +44,13 @@ def input_process(action):
     match action:
         case 'a':
             player.x -= 1
+            obj1.x -= 1
         case 'd':
             player.x += 1
+            obj1.x += 1
         case 'w':
             player.y -= 1
+            obj1.y -= 1
         case 's':
             player.y += 1
+            obj1.y += 1
