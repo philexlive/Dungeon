@@ -1,29 +1,19 @@
 from lib.render import draw
 
 
-class Obj:
-    def __init__(self, pos, mesh):
+class Mesh:
+    def __init__(self, pos, tex):
         self.x, self.y = pos
-        self.mesh = mesh
-
-obj1 = Obj(
-    (2, 2),
-    [
-        ['*', '.', '.', '*'],
-        ['.', '.', '*', '.'],
-        ['.', '*', '.', '.'],
-        ['*', '.', '.', '*'],
-    ]
-)
+        self.tex = tex
 
 
 def obj_to_primitives(obj):
     primitives = []
-    x_len, y_len = (len(obj.mesh), len(obj.mesh[0])) if obj.mesh else (0, 0)
+    x_len, y_len = (len(obj.tex), len(obj.tex[0])) if obj.tex[0] else (0, 0)
     for y in range(y_len):
         for x in range(x_len):
             
-            primitives.append((x+obj.x, y+obj.y, obj.mesh[y][x]))
+            primitives.append((x+obj.x, y+obj.y, obj.tex[y][x]))
     return primitives
 
 
