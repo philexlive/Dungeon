@@ -5,13 +5,21 @@ _height = 12
 _screen = [[' ' for row in range(_width)] for column in range(_height)]
 
 
-def draw(x, y, c):
-    if x >= _width or y >= _height:
-        return
-    
-    if x <= -_width or y <= -_height:
+def draw(x, y, c, /):
+    """Draw one character on the screen.
+
+    :param x: int - Position of the pixel by x axis.
+    :param y: int - Position of the pixel by y axis.
+    :param c: str - Character to draw.
+
+    Function to draw one character on the screen at x an y posisition.
+    """
+
+    # Check if the x and y inside the screen
+    if x >= _width or y >= _height or x < 0 or y < 0:
         return
 
+    # Inserts the character into the screen
     _screen[y][x] = c
 
 
@@ -55,6 +63,15 @@ def _draw_line_high(x0, y0, x1, y1, c, /):
 
 
 def draw_line(start, end, c):
+    """Draw a line on the screen.
+
+    :param start: tuple - starting point position by x and y.
+    :param end: tuple - end point position by x and y.
+    :param c: str - character representing one single unit of the line.
+
+    Function to draw one line from starting to end point on the screen,
+    that uses Bresenham's line algorithm
+    """
     x0, y0 = start
     x1, y1 = end
 
@@ -71,6 +88,8 @@ def draw_line(start, end, c):
             
 
 def render():
+    """Renders the screen to the CLI.
+    """
     for row in _screen:
         for column in row:
             print(column, end='')
