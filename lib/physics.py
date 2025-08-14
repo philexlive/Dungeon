@@ -1,3 +1,5 @@
+from lib.scene import get_scene
+
 class ColBox():
     def __init__(self, x0, y0, x1, y1, enabled=True, layer=0, mask=0):
         self.x0, self.y0, self.x1, self.y1 = x0, y0, x1, y1
@@ -44,3 +46,28 @@ def detect_col(col_box0, col_box1):
         return (collision_x and collision_y, direction)
     
     return (False, 'no_col')
+
+
+def move_and_collide(obj, velocity):
+    objs = get_scene().values()
+    col_boxes = map(lambda o: o.col_box, objs)
+    objs_to_check = [o for o in col_boxes if o.layer == obj.col_box.mask and o != obj.col_box]
+
+    for o in objs_to_check:
+        direction = detect_col(obj.col_box, o)[1]
+        
+        match direction:
+            case 'left' if velocity['x'] > 0:
+                velocity['x'] = 0
+            case 'right' if velocity['x'] < 0:
+                velocity['x'] = 0
+            case 'top' if velocity['y'] > 0:
+                velocity['y'] = 0
+            case 'bottom' if velocity['y'] < 0:
+                velocity['y'] = 0
+
+    obj.mesh.x += velocity['x']
+    obj.mesh.y += velocity['y']
+    obj.col_box.x0 += velocity['x']
+    obj.col_box.y0 += velocity['y']
+    
