@@ -6,6 +6,9 @@ class Mesh:
         self.x, self.y = pos
         self.tex = tex
 
+class Camera:
+    def __init__(self, x, y):
+        self.x, self.y = x, y
 
 def obj_to_primitives(obj):
     """Convert mesh to its primitives.
@@ -16,6 +19,7 @@ def obj_to_primitives(obj):
     which are tuples with position on the 2d plane and 
     a character to draw.
     """
+    
     primitives = []
     x_len, y_len = (len(obj.tex), len(obj.tex[0])) if obj.tex[0] else (0, 0)
     for y in range(y_len):
@@ -26,11 +30,13 @@ def obj_to_primitives(obj):
 
 
 
-def draw_viewport(pos, size, *objs):
+def draw_viewport(pos, size, camera, *objs):
     """Draw bounded viewport.
 
     :param pos: tuple - position of the viewport by x and y.
     :param size: tuple - size of the viewport, witdh and height.
+    :param camera: Camera - camera object to make 
+                            viewport position relative
     :param *objs: mesh - objects to draw into viewport
 
     Function to draw multiple objects within bounded viewport 
@@ -44,26 +50,38 @@ def draw_viewport(pos, size, *objs):
         primitives += obj_to_primitives(obj)
 
     # Draws within the bounded space
-    draw_within(pos[0], pos[1], size[0], size[1], *primitives)
+    draw_within(
+        pos[0], 
+        pos[1], 
+        size[0], 
+        size[1], 
+        camera.x, 
+        camera.y, 
+        *primitives
+    )
         
 
 
-def draw_within(x0, y0, x1, y1, *args):
+def draw_within(x0, y0, x1, y1, x_rel, y_rel, *args):
     """Draws within a bounded space into the screen.
     
     :param x0: int - left bound of the space.
     :param y0: int - top bound of the space.
     :param x1: int - right bound of the space.
     :param y1: int - bottom bound of the space.
+    :param x_rel: int - x value a primitive relative to
+    :param y_rel: int - y value a primitive relative to
     :param *args: tuple - primitives to draw.
 
-    Function to draw all got primitives within 
+    Function to draw all primitives relatively within 
     x0, y0, x1, y1 boundaries.
     """
     
     for arg in args:
-        x_within = arg[0] in range(x0, x1)
-        y_within = arg[1] in range(y0, y1)
-
+        x = arg[0] - x_rel
+        y = arg[1] - y_rel
+        
+        x_within = x in range(x0, x1)
+        y_within = y in range(y0, y1)
         if x_within and y_within:
-            draw(arg[0], arg[1], arg[2])
+            draw(x, y, arg[2])

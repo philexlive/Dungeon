@@ -1,14 +1,14 @@
 from lib.prompt import change_prompt
 from lib.viewport import draw_viewport
 from lib.viewport import Mesh
+from lib.viewport import Camera
 from lib.physics import detect_col
 from lib.physics import ColBox
-from lib.physics import col_direction
 from lib.gameobj import PhyObj
-from src.ui import draw_frame
-from src.ui import draw_hp_bar
-from src.ui import draw_inventory
-from src.ui import draw_actions
+from lib.ui import draw_frame
+from lib.ui import draw_hp_bar
+from lib.ui import draw_inventory
+from lib.ui import draw_actions
 from lifecycle import game_state
 
 
@@ -21,13 +21,13 @@ def destroy_game():
 
 
 player = PhyObj(
-    mesh=Mesh((1, 1), [['Y']]),
-    col_box=ColBox(1, 1, 1, 1)
+    mesh=Mesh((2, 2), [['Y']]),
+    col_box=ColBox(2, 2, 1, 1)
 )
 
 obstacle = PhyObj(
     mesh=Mesh(
-        (2, 2),
+        (3, 3),
         [
             ['*', '.', '.', '*'],
             ['.', '.', '*', '.'],
@@ -35,7 +35,7 @@ obstacle = PhyObj(
             ['*', '.', '.', '*'],
         ]
     ),
-    col_box=ColBox(2, 2, 4, 4)
+    col_box=ColBox(3, 3, 4, 4)
 )
 
 obstacle1 = PhyObj(
@@ -51,6 +51,7 @@ obstacle1 = PhyObj(
     col_box=ColBox(6, 6, 4, 4)
 )
 
+camera = Camera(0, 0)
 
 import lib.render
 def log(pos, **kwds):
@@ -59,13 +60,14 @@ def log(pos, **kwds):
     for i in range(len(s)):
         lib.render.draw(i, 10 + pos, s[i])
 
+
 class Any:
     def __init__(self, value):
         self.value = value
 
 
-
 col = Any((False, 'no_col'))
+
 phy_obs = [
     obstacle,
     obstacle1,
@@ -76,7 +78,7 @@ def draw_process():
     draw_hp_bar((18, 1), 3)
     draw_inventory((18, 3), *['->==>', '[DDD]', 'o--++', None])
     draw_actions((0, 9), "{'a'-left, 's'-down, 'w'-up, 'd'-right, 'dtw'-destroy this world}")
-    draw_viewport((1, 1), (13, 7), player.mesh, obstacle.mesh)
+    draw_viewport((1, 1), (13, 7), camera, player.mesh, obstacle.mesh)
     log(1, x=player.mesh.x, y=player.mesh.y, collides=col.value)
 
 
@@ -103,7 +105,16 @@ def physics_process():
     player.mesh.y += direction[1]
     player.col_box.x0 += direction[0]
     player.col_box.y0 += direction[1]
-   
+
+    cam_follow_l = player.mesh.x <= 1 + camera.x and direction[0] < 0
+    cam_follow_r = player.mesh.x >= 12 + camera.x and direction[0] > 0
+    cam_follow_u = player.mesh.y <= 1 + camera.y and direction[1] < 0
+    cam_follow_d = player.mesh.y >= 6 + camera.y and direction[1] > 0
+
+    if cam_follow_l or cam_follow_r:
+        camera.x += direction[0]
+    if cam_follow_u or cam_follow_d:
+        camera.y += direction[1]
    
     p_col = player.col_box
     o_col = obstacle.col_box
