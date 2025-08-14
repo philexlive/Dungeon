@@ -20,17 +20,19 @@ def init_game():
     change_prompt('Y->==> ')
 
     player = PhyObj(
-        mesh=Mesh((2, 2), [['Y']]),
+        pos=(2, 2),
+        mesh=Mesh((0, 0), [['Y']]),
         col_box=ColBox(
-            2, 2, 1, 1,
+            0, 0, 1, 1,
             layer=1,
             mask=2
         ),
     )
     obstacles = [
         PhyObj(
+            pos=(3, 3),
             mesh=Mesh(
-                (3, 3),
+                (0, 0),
                 [
                     ['*', '.', '.', '*'],
                     ['.', '.', '*', '.'],
@@ -39,14 +41,15 @@ def init_game():
                 ]
             ),
             col_box=ColBox(
-                3, 3, 4, 4,
+                0, 0, 4, 4,
                 layer=2,
                 mask=-1
             ),
         ),
         PhyObj(
+            pos=(6, 6),
             mesh=Mesh(
-                (6, 6),
+                (0, 0),
                 [
                     ['*', '.', '.', '*'],
                     ['.', '.', '*', '.'],
@@ -55,7 +58,7 @@ def init_game():
                 ]
             ),
             col_box=ColBox(
-                6, 6, 4, 4,
+                0, 0, 4, 4,
                 layer=2,
                 mask=-1
             ),
@@ -90,10 +93,9 @@ def draw_process():
     draw_frame()
     draw_hp_bar((18, 1), 3)
     draw_inventory((18, 3), *['->==>', '[DDD]', 'o--++', None])
-    draw_actions((0, 9), "{'a'-left, 's'-down, 'w'-up, 'd'-right, 'dtw'-destroy this world}")
-    meshes = map(lambda obj: obj.mesh, get_scene().values())
-    draw_viewport((1, 1), (13, 7), camera, *meshes)
-    log(1, x=get_obj('player').mesh.x, y=get_obj('player').mesh.y)
+    draw_actions((0, 9), "{'a'-left, 's'-down, 'w'-up, 'd'-right,")
+    draw_actions((0, 10), "'dtw'-destroy this world}")
+    draw_viewport((1, 1), (13, 7), camera, *get_scene().values())
 
 
 direction = [0, 0]
@@ -103,11 +105,16 @@ def physics_process():
     player = get_obj('player')
     move_and_collide(player, velocity)
     
-    cam_follow_l = player.mesh.x < 2 + camera.x and velocity['x'] < 0
-    cam_follow_r = player.mesh.x > 11 + camera.x and velocity['x'] > 0
-    cam_follow_u = player.mesh.y < 2 + camera.y and velocity['y'] < 0
-    cam_follow_d = player.mesh.y > 5 + camera.y and velocity['y'] > 0
+    #cam_follow_l = player.mesh.x < 2 + camera.x and velocity['x'] < 0
+    #cam_follow_r = player.mesh.x > 11 + camera.x and velocity['x'] > 0
+    #cam_follow_u = player.mesh.y < 2 + camera.y and velocity['y'] < 0
+    #cam_follow_d = player.mesh.y > 5 + camera.y and velocity['y'] > 0
 
+    cam_follow_l = player.pos_x < 2 + camera.x and velocity['x'] < 0
+    cam_follow_r = player.pos_x > 11 + camera.x and velocity['x'] > 0
+    cam_follow_u = player.pos_y < 2 + camera.y and velocity['y'] < 0
+    cam_follow_d = player.pos_y > 5 + camera.y and velocity['y'] > 0
+    
     if cam_follow_l or cam_follow_r:
         camera.x += velocity['x']
     if cam_follow_u or cam_follow_d:

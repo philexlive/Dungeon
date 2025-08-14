@@ -11,7 +11,7 @@ class Camera:
         self.x, self.y = x, y
 
 
-def obj_to_primitives(obj):
+def mesh_to_primitives(mesh, x_rel, y_rel):
     """Convert mesh to its primitives.
     
     :param obj: Mesh - a mesh convert to.
@@ -22,11 +22,11 @@ def obj_to_primitives(obj):
     """
     
     primitives = []
-    x_len, y_len = (len(obj.tex), len(obj.tex[0])) if obj.tex[0] else (0, 0)
+    x_len, y_len = (len(mesh.tex), len(mesh.tex[0])) if mesh.tex[0] else (0, 0)
     for y in range(y_len):
         for x in range(x_len):
             
-            primitives.append((x+obj.x, y+obj.y, obj.tex[y][x]))
+            primitives.append((x+mesh.x+x_rel, y+mesh.y+y_rel, mesh.tex[y][x]))
     return primitives
 
 
@@ -48,7 +48,7 @@ def draw_viewport(pos, size, camera, *objs):
 
     # Gets primitives
     for obj in objs:
-        primitives += obj_to_primitives(obj)
+        primitives += mesh_to_primitives(obj.mesh, obj.pos_x, obj.pos_y)
 
     # Draws within the bounded space
     draw_within(
