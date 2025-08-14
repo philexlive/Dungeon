@@ -10,6 +10,7 @@ class Camera:
     def __init__(self, x, y):
         self.x, self.y = x, y
 
+
 def obj_to_primitives(obj):
     """Convert mesh to its primitives.
     

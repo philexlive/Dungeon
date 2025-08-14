@@ -1,6 +1,9 @@
 class ColBox():
-    def __init__(self, x0, y0, x1, y1):
+    def __init__(self, x0, y0, x1, y1, enabled=True, layer=0, mask=0):
         self.x0, self.y0, self.x1, self.y1 = x0, y0, x1, y1
+        self.enabled = enabled
+        self.layer = 0
+        self.mask = 0
 
 def _col_direction(col_box0, col_box1):
     t_col = col_box0.y0 + col_box0.y1 - col_box1.y0
@@ -31,6 +34,7 @@ def detect_col(col_box0, col_box1):
     Function for detection a collision and its direction 
     of two collision boxes.
     """
+
     collision_x = col_box0.x0 + col_box0.x1 >= col_box1.x0 and col_box1.x0 + col_box1.x1 >= col_box0.x0
 
     collision_y = col_box0.y0 + col_box0.y1 >= col_box1.y0 and col_box1.y0 + col_box1.y1 >= col_box0.y0
@@ -40,4 +44,3 @@ def detect_col(col_box0, col_box1):
         return (collision_x and collision_y, direction)
     
     return (False, 'no_col')
-
