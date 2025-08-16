@@ -14,69 +14,26 @@ from lib.ui import draw_hp_bar
 from lib.ui import draw_inventory
 from lib.ui import draw_actions
 from lifecycle import game_state
+from lib.io import parse_phyobj
 
 def init_game():
     change_prompt('Y->==> ')
 
-    player = PhyObj(
-        pos_x=2,
-        pos_y=2,
-        mesh=Mesh(
-            x=0, 
-            y=0, 
-            tex=[['Y']]
-        ),
-        col_box=ColBox(
-            0, 0, 1, 1,
-            layer=1,
-            mask=2
-        ),
-    )
-    obstacles = [
-        PhyObj(
-            pos_x=3,
-            pos_y=3,
-            mesh=Mesh(
-                x=0,
-                y=0,
-                tex=[
-                    ['*', '.', '.', '*'],
-                    ['.', '.', '*', '.'],
-                    ['.', '*', '.', '.'],
-                    ['*', '.', '.', '*'],
-                ]
-            ),
-            col_box=ColBox(
-                0, 0, 4, 4,
-                layer=2,
-                mask=-1
-            ),
-        ),
-        PhyObj(
-            pos_x=6,
-            pos_y=6,
-            mesh=Mesh(
-                x=0,
-                y=0,
-                tex=[
-                    ['*', '.', '.', '*'],
-                    ['.', '.', '*', '.'],
-                    ['.', '*', '.', '.'],
-                    ['*', '.', '.', '*'],
-                ]
-            ),
-            col_box=ColBox(
-                0, 0, 4, 4,
-                layer=2,
-                mask=-1
-            ),
-        )
-    ]
+
+    RES = 'src/res/'
+
+    player = parse_phyobj(RES, 'player.phyobj')
+    obstacle = parse_phyobj(RES, 'obstacle.phyobj')
+    obstacle.pos_x = 3
+    obstacle.pos_y = 3
+    obstacle1 = parse_phyobj(RES, 'obstacle.phyobj')
+    obstacle1.pos_x = 6
+    obstacle1.pos_y = 5
+
 
     add_obj('player', player)
-    for i in range(len(obstacles)):
-        add_obj(f'obstacle{i}', obstacles[i])
-
+    add_obj('obstacle', obstacle)
+    add_obj('obstacle1', obstacle1)
 
 def destroy_game():
     pass

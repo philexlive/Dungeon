@@ -1,0 +1,17 @@
+@self
+pos_x=2
+pos_y=2
+
+@mesh
+x=0
+y=0
+tex=src/res/player.tex
+
+@colbox
+x0=0
+y0=0
+x1=1
+y1=1
+enabled=true
+layer=1
+mask=2

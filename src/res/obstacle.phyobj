@@ -1,11 +1,13 @@
-PhyObj
-
 @self
 pos_x=8
 pos_y=0
-mesh=obstacle_mesh.dungeon
 
-@col_box 
+@mesh
+x=0
+y=0
+tex=src/res/obstacle.tex
+
+@colbox 
 x0=0
 y0=0
 x1=4

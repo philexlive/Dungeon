@@ -1,4 +1,4 @@
-from lib.io import build_obj
+from lib.io import parse_phyobj
 from lib.scene import add_obj
 import os
 
@@ -13,5 +13,4 @@ RES = 'src/res/'
 
 
 def build_objs():
-    obj = build_obj(RES, 'obstacle.dungeon')
-    add_obj('obstacle2', obj)
+    pass
