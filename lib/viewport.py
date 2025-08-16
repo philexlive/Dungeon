@@ -2,8 +2,8 @@ from lib.render import draw
 
 
 class Mesh:
-    def __init__(self, pos, tex):
-        self.x, self.y = pos
+    def __init__(self, x, y, tex):
+        self.x, self.y = x, y 
         self.tex = tex
 
 class Camera:

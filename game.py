@@ -4,10 +4,12 @@ from src.process import destroy_game
 from src.process import input_process
 from src.process import physics_process
 from lifecycle import game_state
+from lifecycle import build_objs
 from lib.render import render
 from lib.prompt import action
 
 if __name__ == "__main__":
+    build_objs()
     init_game()
     
     while game_state.is_running:

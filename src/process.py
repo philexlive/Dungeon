@@ -15,13 +15,17 @@ from lib.ui import draw_inventory
 from lib.ui import draw_actions
 from lifecycle import game_state
 
-
 def init_game():
     change_prompt('Y->==> ')
 
     player = PhyObj(
-        pos=(2, 2),
-        mesh=Mesh((0, 0), [['Y']]),
+        pos_x=2,
+        pos_y=2,
+        mesh=Mesh(
+            x=0, 
+            y=0, 
+            tex=[['Y']]
+        ),
         col_box=ColBox(
             0, 0, 1, 1,
             layer=1,
@@ -30,10 +34,12 @@ def init_game():
     )
     obstacles = [
         PhyObj(
-            pos=(3, 3),
+            pos_x=3,
+            pos_y=3,
             mesh=Mesh(
-                (0, 0),
-                [
+                x=0,
+                y=0,
+                tex=[
                     ['*', '.', '.', '*'],
                     ['.', '.', '*', '.'],
                     ['.', '*', '.', '.'],
@@ -47,10 +53,12 @@ def init_game():
             ),
         ),
         PhyObj(
-            pos=(6, 6),
+            pos_x=6,
+            pos_y=6,
             mesh=Mesh(
-                (0, 0),
-                [
+                x=0,
+                y=0,
+                tex=[
                     ['*', '.', '.', '*'],
                     ['.', '.', '*', '.'],
                     ['.', '*', '.', '.'],
@@ -93,8 +101,7 @@ def draw_process():
     draw_frame()
     draw_hp_bar((18, 1), 3)
     draw_inventory((18, 3), *['->==>', '[DDD]', 'o--++', None])
-    draw_actions((0, 9), "{'a'-left, 's'-down, 'w'-up, 'd'-right,")
-    draw_actions((0, 10), "'dtw'-destroy this world}")
+    draw_actions((0, 9), "a | s | w | d")
     draw_viewport((1, 1), (13, 7), camera, *get_scene().values())
 
 
@@ -105,11 +112,6 @@ def physics_process():
     player = get_obj('player')
     move_and_collide(player, velocity)
     
-    #cam_follow_l = player.mesh.x < 2 + camera.x and velocity['x'] < 0
-    #cam_follow_r = player.mesh.x > 11 + camera.x and velocity['x'] > 0
-    #cam_follow_u = player.mesh.y < 2 + camera.y and velocity['y'] < 0
-    #cam_follow_d = player.mesh.y > 5 + camera.y and velocity['y'] > 0
-
     cam_follow_l = player.pos_x < 2 + camera.x and velocity['x'] < 0
     cam_follow_r = player.pos_x > 11 + camera.x and velocity['x'] > 0
     cam_follow_u = player.pos_y < 2 + camera.y and velocity['y'] < 0

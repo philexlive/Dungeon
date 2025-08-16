@@ -1,0 +1,15 @@
+PhyObj
+
+@self
+pos_x=8
+pos_y=0
+mesh=obstacle_mesh.dungeon
+
+@col_box 
+x0=0
+y0=0
+x1=4
+y1=4
+enabled=true
+layer=2
+mask=-1

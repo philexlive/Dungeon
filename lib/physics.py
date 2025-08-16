@@ -73,7 +73,6 @@ def move_and_collide(obj, velocity):
                 obj.col_box, o.col_box, 
                 (obj.pos_x, obj.pos_y), (o.pos_x, o.pos_y)
                 )
-        print(direction)
         match direction:
             case 'left' if velocity['x'] > 0:
                 velocity['x'] = 0
