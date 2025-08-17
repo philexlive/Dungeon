@@ -8,7 +8,7 @@ from lib.physics import ColBox
 from lib.scene import add_obj
 from lib.scene import get_obj
 from lib.scene import get_scene
-from lib.gameobj import PhyObj
+from lib.phyobj import PhyObj
 from lib.ui import draw_frame
 from lib.ui import draw_hp_bar
 from lib.ui import draw_inventory
@@ -19,21 +19,22 @@ from lib.io import parse_phyobj
 def init_game():
     change_prompt('Y->==> ')
 
-
     RES = 'src/res/'
 
     player = parse_phyobj(RES, 'player.phyobj')
+
     obstacle = parse_phyobj(RES, 'obstacle.phyobj')
     obstacle.pos_x = 3
     obstacle.pos_y = 3
+
     obstacle1 = parse_phyobj(RES, 'obstacle.phyobj')
     obstacle1.pos_x = 6
     obstacle1.pos_y = 5
 
-
     add_obj('player', player)
     add_obj('obstacle', obstacle)
     add_obj('obstacle1', obstacle1)
+
 
 def destroy_game():
     pass
@@ -63,36 +64,37 @@ def draw_process():
 
 
 direction = [0, 0]
-velocity = {'x':0, 'y':0}
 
 def physics_process():
     player = get_obj('player')
-    move_and_collide(player, velocity)
     
-    cam_follow_l = player.pos_x < 2 + camera.x and velocity['x'] < 0
-    cam_follow_r = player.pos_x > 11 + camera.x and velocity['x'] > 0
-    cam_follow_u = player.pos_y < 2 + camera.y and velocity['y'] < 0
-    cam_follow_d = player.pos_y > 5 + camera.y and velocity['y'] > 0
+    move_and_collide(player)
+
+    cam_follow_l = player.pos_x < 2 + camera.x and player.velocity.x < 0
+    cam_follow_r = player.pos_x > 11 + camera.x and player.velocity.x > 0
+    cam_follow_u = player.pos_y < 2 + camera.y and player.velocity.y < 0
+    cam_follow_d = player.pos_y > 5 + camera.y and player.velocity.y > 0
     
     if cam_follow_l or cam_follow_r:
-        camera.x += velocity['x']
+        camera.x += player.velocity.x
     if cam_follow_u or cam_follow_d:
-        camera.y += velocity['y']
+        camera.y += player.velocity.y
 
-    velocity['x']=0
-    velocity['y']=0
+    player.velocity.x = 0
+    player.velocity.y = 0
 
 
 def input_process(action):
     if action == 'dtw':
         game_state.is_running = False
 
+    player = get_obj('player')
     match action:
         case 'a':
-            velocity['x']=(-1)
+            player.velocity.x = -1
         case 'd':
-            velocity['x']=1 
+            player.velocity.x = 1
         case 'w':
-            velocity['y']=(-1)
+            player.velocity.y = -1
         case 's':
-            velocity['y']=1 
+            player.velocity.y = 1

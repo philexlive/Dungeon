@@ -1,6 +1,8 @@
 from lib.physics import ColBox
+from lib.physics import Velocity
 from lib.viewport import Mesh
-from lib.gameobj import PhyObj
+from lib.phyobj import PhyObj
+
 
 phyobj_rule = {
     'pos_x': 'int',
@@ -31,17 +33,30 @@ def parse_phyobj(directory, file):
                 tokens[group] = {}
             elif '=' in ln:
                 i = identifier('=')
-                v = _convert_val(i, value('='), phyobj_rule)
+                v = convert_val(i, value('='), phyobj_rule)
                 tokens[group][i] = v
+                
+    mesh = None
+    colbox = None
+    velocity = Velocity(0, 0)
+
+    if tokens['mesh']:
+        mesh = Mesh(**tokens['mesh'])
+    if tokens['colbox']:
+        colbox = ColBox(**tokens['colbox'])
+    if tokens['velocity']:
+        velocity = Velocity(**tokens['velocity'])
+
     phyobj = PhyObj(
         **tokens['self'],
-        mesh=Mesh(**tokens['mesh']),
-        col_box=ColBox(**tokens['colbox'])
+        mesh=mesh,
+        colbox=colbox,
+        velocity = velocity
     )
     return phyobj
             
 
-def _convert_val(i, v, rule):
+def convert_val(i, v, rule):
     match rule[i]:
         case 'int':
             return int(v)

@@ -15,6 +15,8 @@ def mesh_to_primitives(mesh, x_rel, y_rel):
     """Convert mesh to its primitives.
     
     :param obj: Mesh - a mesh convert to.
+    :param x_rel: int - relative position in x axis.
+    :param y_rel: int - relative position in y axis.
 
     Function to convert a mesh to a list of primitives,
     which are tuples with position on the 2d plane and 
