@@ -1,6 +1,5 @@
 from lib.scene import get_scene
 
-# TODO: remove duplicates
 
 class ColBox():
     def __init__(self, x0, y0, x1, y1, enabled, layer, mask):
@@ -12,31 +11,6 @@ class ColBox():
 class Velocity():
     def __init__(self, x, y):
         self.x, self.y = x,  y
-
-def _col_direction(colbox0, colbox1, pos0, pos1):
-    pos_x0, pos_y0 = pos0
-    pos_x1, pos_y1 = pos1
-    
-    pos_x_rel0 = colbox0.x0 + pos_x0
-    pos_y_rel0 = colbox0.y0 + pos_y0
-    pos_x_rel1 = colbox1.x0 + pos_x1
-    pos_y_rel1 = colbox1.y0 + pos_y1
-    
-    t_col = pos_y_rel0 + colbox0.y1 - pos_y_rel1
-    b_col = pos_y_rel1 + colbox1.y1 - pos_y_rel0
-    l_col = pos_x_rel0 + colbox0.x1 - pos_x_rel1
-    r_col = pos_x_rel1 + colbox1.x1 - pos_x_rel0
-    
-    if t_col < b_col and t_col < l_col and t_col < r_col:
-        return 'top'
-    if b_col < t_col and b_col < l_col and b_col < r_col:
-        return 'bottom'
-    if l_col < r_col and l_col < t_col and l_col < b_col:
-        return 'left'
-    if r_col < l_col and r_col < t_col and r_col < b_col:
-        return 'right'
-    
-    return None
 
 
 def detect_col(colbox0, colbox1, pos0, pos1):
@@ -51,6 +25,9 @@ def detect_col(colbox0, colbox1, pos0, pos1):
     Function for detection a collision and its direction 
     of two collision boxes.
     """
+    if not colbox0.enabled or not colbox1.enabled:
+        print("not enabled")
+        return None
 
     pos_x0, pos_y0 = pos0
     pos_x1, pos_y1 = pos1
@@ -64,10 +41,23 @@ def detect_col(colbox0, colbox1, pos0, pos1):
 
     collision_y = pos_y_rel0 + colbox0.y1 >= pos_y_rel1 and pos_y_rel1 + colbox1.y1 >= pos_y_rel0 
 
-    if collision_x and collision_y:
-        return _col_direction(colbox0, colbox1, pos0, pos1)
+    if not collision_x and not collision_y:
+        print("no collision")
+        return
     
-    return None 
+    t_col = pos_y_rel0 + colbox0.y1 - pos_y_rel1
+    b_col = pos_y_rel1 + colbox1.y1 - pos_y_rel0
+    l_col = pos_x_rel0 + colbox0.x1 - pos_x_rel1
+    r_col = pos_x_rel1 + colbox1.x1 - pos_x_rel0
+    
+    if t_col < b_col and t_col < l_col and t_col < r_col:
+        return 'top'
+    if b_col < t_col and b_col < l_col and b_col < r_col:
+        return 'bottom'
+    if l_col < r_col and l_col < t_col and l_col < b_col:
+        return 'left'
+    if r_col < l_col and r_col < t_col and r_col < b_col:
+        return 'right'
 
 
 def move_and_collide(phyobj):
@@ -94,4 +84,4 @@ def move_and_collide(phyobj):
 
     phyobj.pos_x += phyobj.velocity.x
     phyobj.pos_y += phyobj.velocity.y
-    
+

@@ -1,11 +1,12 @@
 @self
 pos_x=2
 pos_y=2
+inherit=true
 
 @mesh
 x=0
 y=0
-tex=src/res/player.tex
+tex=src/res/player.objtex
 
 @colbox
 x0=0

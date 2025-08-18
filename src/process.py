@@ -30,7 +30,7 @@ def init_game():
     obstacle1 = parse_phyobj(RES, 'obstacle.phyobj')
     obstacle1.pos_x = 6
     obstacle1.pos_y = 5
-
+    obstacle1.colbox.enabled = False
     add_obj('player', player)
     add_obj('obstacle', obstacle)
     add_obj('obstacle1', obstacle1)

@@ -16,7 +16,8 @@ phyobj_rule = {
     'y1': 'int',
     'enabled': 'bool',
     'layer': 'int',
-    'mask': 'int'
+    'mask': 'int',
+    'inherit': 'bool'
 }
 
 
@@ -54,14 +55,17 @@ def parse_phyobj(directory, file):
         velocity = velocity
     )
     return phyobj
-            
+
 
 def convert_val(i, v, rule):
     match rule[i]:
         case 'int':
             return int(v)
         case 'bool':
-            return bool(v)
+            if v.lower() == 'true':
+                return True
+            else:
+                return False
         case 'texture':
             return read_tex(v)
         case _:

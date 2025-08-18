@@ -1,11 +1,12 @@
 @self
 pos_x=8
 pos_y=0
+inherit=true
 
 @mesh
 x=0
 y=0
-tex=src/res/obstacle.tex
+tex=src/res/obstacle.objtex
 
 @colbox 
 x0=0
