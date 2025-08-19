@@ -31,10 +31,16 @@ def init_game():
     obstacle1.pos_x = 6
     obstacle1.pos_y = 5
     obstacle1.colbox.enabled = False
+
+    obstacle2 = parse_phyobj(RES, 'obstacle.phyobj')
+    obstacle2.pos_x = 8
+    obstacle2.pos_y = -2
+    obstacle2.colbox = None
+
     add_obj('player', player)
     add_obj('obstacle', obstacle)
     add_obj('obstacle1', obstacle1)
-
+    add_obj('obstacle2', obstacle2)
 
 def destroy_game():
     pass

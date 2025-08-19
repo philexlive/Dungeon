@@ -2,7 +2,11 @@ from lib.render import draw
 
 
 class Mesh:
-    def __init__(self, x, y, tex):
+    def __init__(self, 
+                 x=0, 
+                 y=0, 
+                 tex=None
+                 ):
         self.x, self.y = x, y 
         self.tex = tex
 
@@ -23,6 +27,9 @@ def mesh_to_primitives(mesh, x_rel, y_rel):
     a character to draw.
     """
     
+    if not mesh.tex:
+        return []
+
     primitives = []
     x_len, y_len = (len(mesh.tex), len(mesh.tex[0])) if mesh.tex[0] else (0, 0)
     for y in range(y_len):
