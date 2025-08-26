@@ -1,25 +1,29 @@
-from lib.scene import get_scene
+import lexemobj
+import vec
+from src.scene import get_scene
 
 
-class ColBox():
-    def __init__(self, 
-                 x0=0, 
-                 y0=0,
-                 x1=1, 
-                 y1=1, 
-                 enabled=True, 
-                 layer=1,
-                 mask=1
-                 ):
-        self.x0, self.y0, self.x1, self.y1 = x0, y0, x1, y1
-        self.enabled = enabled
-        self.layer = layer
-        self.mask = mask
-
-
-class Velocity():
+class Vector:
     def __init__(self, x=0, y=0):
         self.x, self.y = x,  y
+
+
+_LEXEM_PHY = 'lexemPhy'
+
+class LexemPhy(lexemobj.LexemObj):
+    def __init__(self):
+        super().__init__()
+        self.name = _LEXEM_PHY
+        self.vel = vec.Vec(0, 0)
+
+
+class LexemCol(lexemobj.LexemObj):
+    def __init__(self):
+        super().__init__()
+        self.box = None
+        self.enabled = True
+        self.layer = 1
+        self.mask = 1
 
 
 def detect_col(colbox0, colbox1, pos0, pos1):

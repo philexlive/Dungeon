@@ -1,4 +1,4 @@
-from lib.render import draw
+from src.render import draw
 
 
 class Mesh:

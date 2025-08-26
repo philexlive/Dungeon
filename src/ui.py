@@ -1,5 +1,5 @@
-from lib.render import draw_line
-from lib.render import draw
+from src.render import draw_line
+from src.render import draw
 
 
 def draw_frame():
