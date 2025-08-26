@@ -1,8 +1,15 @@
-Simple Dungeon Crawler CLI game.
+Simple CLI game engine.
 
-## How to run
+**Wisayo** is a blend word of **Wi**ll **Sa**y **Yo**u. Means game developer using this game engine want say something important to the players.
 
-In your terminal:
+# Lexem
 
-1. Go to the directory `cd path/to/repository`
-1. Run the game with `python game.py`
+**Lexem** is a basic building block for your game, it represents game objects you add to your game.
+
+# To Do
+
+- [ ] Implement all **Lexem** derived
+- [ ] Adapt physics related code for working with **LexemPhy** objects
+- [ ] Rewrite graphics lerated code
+- [ ] Implement Runtime
+- [ ] Implement Scene
