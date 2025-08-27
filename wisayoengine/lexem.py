@@ -5,6 +5,8 @@ class Lexem:
         self.name = _LEXEM
         self.lexemes = []
 
+    def find_child(self, path): pass
+
     def on_enter(self): pass
 
     def on_process(self): pass

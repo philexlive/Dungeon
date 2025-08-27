@@ -1,5 +1,5 @@
-from src.render import draw_line
-from src.render import draw
+from wisayoengine.graphics import draw_line
+from wisayoengine.graphics import draw
 
 
 def draw_frame():

@@ -1,19 +1,6 @@
-from src.render import draw
+# TODO: Rewrite or remove code
 
-
-class Mesh:
-    def __init__(self, 
-                 x=0, 
-                 y=0, 
-                 tex=None
-                 ):
-        self.x, self.y = x, y 
-        self.tex = tex
-
-class Camera:
-    def __init__(self, x, y):
-        self.x, self.y = x, y
-
+from wisayoengine.graphics import draw
 
 def mesh_to_primitives(mesh, x_rel, y_rel):
     """Convert mesh to its primitives.

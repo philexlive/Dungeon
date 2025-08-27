@@ -8,7 +8,7 @@ Simple CLI game engine.
 
 # To Do
 
-- [ ] Implement all **Lexem** derived
+- [x] Implement all **Lexem** derived
 - [ ] Adapt physics related code for working with **LexemPhy** objects
 - [ ] Rewrite graphics lerated code
 - [ ] Implement Runtime
