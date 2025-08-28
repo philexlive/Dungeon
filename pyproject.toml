@@ -1,0 +1,19 @@
+[project]
+name = "wisayoengine"
+version = "0.0.1"
+authors = [
+  { name="Philex Fertich", email="philex.live@gmail.com" },
+]
+description = "Simple CLI game engine"
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+license = "Unlicense"
+license-files = ["LICEN[CS]E*"]
+
+[project.urls]
+Homepage = "https://github.com/philexlive/WisayoEngine"
+Issues = "https://github.com/philexlive/WisayoEngine/issues"

@@ -1,8 +1,13 @@
-Simple Dungeon Crawler CLI game.
+Simple CLI game engine.
 
-## How to run
+**Wisayo** is a blend word of **Wi**ll **Sa**y **Yo**u. Means game developer using this game engine want say something important to the players.
 
-In your terminal:
 
-1. Go to the directory `cd path/to/repository`
-1. Run the game with `python game.py`
+# TODO
+- [x] Engine lifecycle
+- [x] Rendering
+- [ ] Scene graph
+- [ ] Camera
+- [ ] IO and abstraction layer
+- [ ] Physics
+- [ ] parser
