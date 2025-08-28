@@ -3,23 +3,8 @@ import vec
 from src.tree import get_scene
 
 
-_LEXEM_PHY = 'lexemPhy'
-
-class LexemPhy(lexemobj.LexemObj):
-    def __init__(self):
-        super().__init__()
-        self.name = _LEXEM_PHY
-        self.vel = vec.Vec(0, 0)
-
-
-class LexemCol(lexemobj.LexemObj):
-    def __init__(self):
-        super().__init__()
-        self.box = None
-        self.enabled = True
-        self.layer = 1
-        self.mask = 1
-
+class Physics:
+    pass
 
 def detect_col(x0, y0, x1, y1):
     """Detect collision of two collision boxes.
