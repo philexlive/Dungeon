@@ -1,4 +1,4 @@
-from graphics.texture_component import TextureComponent
+from wisayoengine.graphics.texture_component import TextureComponent
 
 class ReadTextureException(Exception): pass
 

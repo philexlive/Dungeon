@@ -1,6 +1,3 @@
-from .texture_component import TextureComponent
-
-
 class RenderSystem:
     def __init__(self, renderer, width, height, component_manager):
         self.width = width
@@ -8,22 +5,16 @@ class RenderSystem:
         self.renderer = renderer
         self.component_manager = component_manager
 
-    def append_element(self, element):
-        x_s = element[1].x + element[0].width
-        y_s = element[1].y + element[0].height
-
-        is_within_width = x_s > 0 and element[1].x < self.width
-        is_within_height = y_s > 0 and element[1].y < self.height
-
-        if is_within_width or is_within_height:
-            self.elements.append(element)
-
     def render(self):
-        for element in self.component_manager.fetch_with(TextureComponent):
-            self.append_element(element)
+        for element in self.component_manager.fetch_textures():
+            x_s = element['position'].x + element['texture'].width
+            y_s = element['position'].y + element['texture'].height
 
-        for element in self.elements:
-            self.prepare_texture(element[0], element[1])
+            is_within_width = x_s > 0 and element['position'].x < self.width
+            is_within_height = y_s > 0 and element['position'].y < self.height
+
+            if is_within_width or is_within_height:
+                self.prepare_texture(element['texture'], element['position'])
 
     def prepare_texture(self, texture, position):
         column = 0
