@@ -1,1 +1,1 @@
-class CameraComponent: pass
+class Camera: pass

@@ -1,6 +1,6 @@
 class Renderer:
     def __init__(self):
-        self._buffer = []
+        self.buffer = []
 
     def draw(self, x, y, c):
         raise NotImplemented
