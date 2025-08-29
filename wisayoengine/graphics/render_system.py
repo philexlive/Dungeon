@@ -14,16 +14,6 @@ class RenderSystem:
             is_within_height = y_s > 0 and element['position'].y < self.height
 
             if is_within_width or is_within_height:
-                self.prepare_texture(element['texture'], element['position'])
-
-    def prepare_texture(self, texture, position):
-        column = 0
-        row = 0
-        for c in list(texture.data):
-            if c == '/':
-                row += 1
-                column = 0
-                continue
-
-            self.renderer.draw(column + position.x, row + position.y, c)
-            column += 1
+                for i in element['texture'].draw_pack:
+                    self.renderer.draw(i[0] + element['position'].x, i[1] + element['position'].y, i[2])
+                element['texture'].draw_pack.reset()

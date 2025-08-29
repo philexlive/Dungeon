@@ -1,13 +1,18 @@
 import random
-from .entity import Entity
-from .position_component import PositionComponent
-from wisayoengine.graphics.camera import CameraComponent
-from wisayoengine.graphics.texture_component import TextureComponent
+
+from wisayoengine.core import Position
+from wisayoengine.core.entity import Entity
+from wisayoengine.graphics.camera import Camera
+from wisayoengine.graphics.texture import Texture
+
+
+class FindObjectError(Exception)
 
 
 class ComponentManager:
     def __init__(self):
         self.entities = []
+        self.entities_relation = []
 
         self.positions = []
         self.position_ids = {}
@@ -26,23 +31,43 @@ class ComponentManager:
             for k in self.texture_ids
         ]
 
+    def get_indices(self):
+        return list(map(lambda entity: entity.identity, self.entities))
+
+    def get_with_id(self, identity):
+        for entity in self.entities:
+            if entity.identity == identity:
+                temp = []
+                if entity.identity in self.positions:
+                    temp.append(self.positions[entity.identity])
+                elif entity.identity in self.textures:
+                    temp.append(self.textures[entity.identity])
+                elif entity.identity in self.cameras:
+                    temp.append(self.cameras[entity.identity])
+
+                return temp
+
+        raise FindObjectError
+
+    def get_position(self, identity):
+        return self.positions[self.position_ids[identity]]
+
     def append(self, obj):
         new_entity = Entity(self.get_unique_id())
 
         for component in obj:
-            if isinstance(component, PositionComponent):
+            if isinstance(component, Position):
                 l = len(self.positions)
                 self.positions.append(component)
                 self.position_ids[new_entity.identity] = l
-            elif isinstance(component, TextureComponent):
+            elif isinstance(component, Texture):
                 l = len(self.textures)
                 self.textures.append(component)
                 self.texture_ids[new_entity.identity] = l
-            elif isinstance(component, CameraComponent):
+            elif isinstance(component, Camera):
                 l = len(self.cameras)
                 self.cameras.append(component)
                 self.camera_ids[new_entity.identity] = l
-            print("appended")
 
         self.entities.append(new_entity)
 
