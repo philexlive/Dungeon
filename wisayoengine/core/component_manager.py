@@ -6,7 +6,7 @@ from wisayoengine.graphics.camera import Camera
 from wisayoengine.graphics.texture import Texture
 
 
-class FindObjectError(Exception)
+class FindObjectError(Exception): pass
 
 
 class ComponentManager:

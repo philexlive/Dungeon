@@ -10,7 +10,6 @@ from wisayoengine.io.texture_parser import TextureParser
 from pynput import keyboard
 
 
-
 def on_press(key):
     try:
         pressed_keys.add(key.char)
