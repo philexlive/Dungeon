@@ -14,6 +14,19 @@ class RenderSystem:
             is_within_height = y_s > 0 and element['position'].y < self.height
 
             if is_within_width or is_within_height:
-                for i in element['texture'].draw_pack:
-                    self.renderer.draw(i[0] + element['position'].x, i[1] + element['position'].y, i[2])
+                row = 0
+                column = 0
+                for p in element['texture'].draw_pack:
+                    self.renderer.draw(
+                        element['position'].x + column,
+                        element['position'].y + row,
+                        p
+                    )
+
+                    if column < 3:
+                        column += 1
+                    else:
+                        row += 1
+                        column = 0
+
                 element['texture'].draw_pack.reset()

@@ -1,6 +1,6 @@
 [project]
 name = "wisayoengine"
-version = "0.0.2"
+version = "0.0.3"
 authors = [
   { name="Philex Fertich", email="philex.live@gmail.com" },
 ]

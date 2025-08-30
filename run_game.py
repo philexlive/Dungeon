@@ -1,13 +1,12 @@
 import os
-
+from pynput import keyboard
 from wisayoengine.core.component_manager import ComponentManager
 from wisayoengine.core.position import Position
 from wisayoengine.engine import Engine
+from wisayoengine.graphics.draw_pack import DrawPack
 from wisayoengine.graphics.renderer import Renderer
+from wisayoengine.graphics.texture import Texture
 from wisayoengine.io.input_api import InputApi
-from wisayoengine.io.texture_parser import TextureParser
-
-from pynput import keyboard
 
 
 def on_press(key):
@@ -36,6 +35,7 @@ start_listener()
 pressed_keys = set()
 
 if __name__ == "__main__":
+    ascii_map = "`.-':_,^=;><+!rc*/z?sLTv)J7(|Fi{C}fI31tlu[neoZ5Yxjya]2ESwqkP6h9d4VpOGbUAKXHm8RD#$Bg0MNWQ%&@"
 
     # ________renderer________
     class CustomRendererImpl(Renderer):
@@ -49,7 +49,7 @@ if __name__ == "__main__":
                 x = element[0]
                 y = element[1]
                 if 0 <= x < 50 and 0 <= y < 12:
-                    screen[y][x] = element[2]
+                    screen[y][x] = ascii_map[int((element[2][3] / 255) * len(ascii_map) - 1) ]
 
             for row in screen:
                 print(''.join(row))
@@ -59,18 +59,39 @@ if __name__ == "__main__":
             os.system("cls" if os.name == "nm" else "clear")
             pass
 
+
+    # ________component_manager________
     component_manager = ComponentManager()
+
+    draw_pack = DrawPack([
+        #  R    G    B    A
+        (255,   0,   0,  25),
+        (255,   0,   0, 100),
+        (  0, 255,   0, 100),
+        (  0, 255,   0,  25),
+
+        (255,   0,   0, 100),
+        (  0, 255,   0, 255),
+        (  0, 255,   0, 255),
+        (  0, 255,   0, 100),
+
+        (  0, 255,   0, 100),
+        (  0, 255,   0, 255),
+        (  0, 255,   0, 255),
+        (  0,   0, 255, 100),
+
+        (  0, 255,   0,  25),
+        (  0, 255,   0, 100),
+        (  0,   0, 255, 100),
+        (  0,   0, 255,  25),
+    ])
+    texture = Texture(draw_pack, 4, 4)
+
     component_manager.append(
-        [
-            TextureParser().load_texture('tests/res/box.texture'),
-            Position(0, 0)
-        ]
+        [texture, Position(0, 0)]
     )
     component_manager.append(
-        [
-            TextureParser().load_texture('tests/res/box.texture'),
-            Position(4, 4)
-        ]
+        [texture, Position(4, 4)]
     )
 
     # ________input________
