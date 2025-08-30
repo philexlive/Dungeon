@@ -7,7 +7,7 @@ from wisayoengine.graphics.texture import Texture
 
 
 class FindObjectError(Exception): pass
-
+class IdentityUniquenessError(Exception): pass
 
 class ComponentManager:
     def __init__(self):
@@ -53,7 +53,14 @@ class ComponentManager:
         return self.positions[self.position_ids[identity]]
 
     def append(self, obj):
-        new_entity = Entity(self.get_unique_id())
+        def check_name(i=0):
+            nonlocal new_entity
+            if new_entity.identity in map(lambda entity: entity.identity, self.entities):
+                new_entity.identity = f"{new_entity.identity}{i}"
+                check_name(i)
+
+        new_entity = Entity('Entity')
+        check_name()
 
         for component in obj:
             if isinstance(component, Position):
@@ -69,15 +76,7 @@ class ComponentManager:
                 self.cameras.append(component)
                 self.camera_ids[new_entity.identity] = l
 
+
         self.entities.append(new_entity)
 
-        print("New entity just added")
-
-    def get_unique_id(self):
-        symbols = "abcdefghjklmnopqrstuvwxyz0123456789"
-        get_id = lambda:"".join([random.choice(symbols) for _ in range(8)])
-        new_id = get_id()
-        while new_id in map(lambda entity: entity.identity, self.entities):
-            new_id = get_id()
-
-        return new_id
+        print(f"New entity with name {new_entity.identity} just added")

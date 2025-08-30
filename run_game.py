@@ -66,6 +66,12 @@ if __name__ == "__main__":
             Position(0, 0)
         ]
     )
+    component_manager.append(
+        [
+            TextureParser().load_texture('tests/res/box.texture'),
+            Position(4, 4)
+        ]
+    )
 
     # ________input________
     class InputApiImpl(InputApi):
@@ -96,10 +102,8 @@ if __name__ == "__main__":
         def input(self):
             pass
 
+
     # ________init_________
-
-    print(component_manager.get_position(component_manager.get_indices()[0]))
-
 
     input_impl = InputApiImpl()
     render_impl = CustomRendererImpl()
