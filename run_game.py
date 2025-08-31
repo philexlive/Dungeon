@@ -1,7 +1,12 @@
+import math
 import os
 from pynput import keyboard
+
+from wisayoengine.core.basic_components import PositionComponent, ScaleComponent
 from wisayoengine.core.component_manager import ComponentManager
-from wisayoengine.core.position import Position
+from wisayoengine.core.rotation import Rotation
+from wisayoengine.core.transform import Transform
+from wisayoengine.core.vector import Vector
 from wisayoengine.engine import Engine
 from wisayoengine.graphics.draw_pack import DrawPack
 from wisayoengine.graphics.renderer import Renderer
@@ -46,8 +51,8 @@ if __name__ == "__main__":
             screen = [[' ' for _ in range(50)] for _ in range(12)]
 
             for element in self.buffer:
-                x = element[0]
-                y = element[1]
+                x = int(element[0])
+                y = int(element[1])
                 if 0 <= x < 50 and 0 <= y < 12:
                     screen[y][x] = ascii_map[int((element[2][3] / 255) * len(ascii_map) - 1) ]
 
@@ -88,12 +93,8 @@ if __name__ == "__main__":
     texture = Texture(draw_pack, 4, 4)
 
     component_manager.append(
-        [texture, Position(0, 0)]
+        [texture, PositionComponent(0, 0), Rotation(0), Transform(), ScaleComponent(1, 1)]
     )
-    component_manager.append(
-        [texture, Position(4, 4)]
-    )
-
     # ________input________
     class InputApiImpl(InputApi):
         def __init__(self):
@@ -102,6 +103,8 @@ if __name__ == "__main__":
         def on_input(self):
 
             direction = (0, 0)
+
+            player = self.cm.get_indices()[0]
 
             if 'd' in pressed_keys:
                 direction = (1, 0)
@@ -112,8 +115,22 @@ if __name__ == "__main__":
             elif 's' in pressed_keys:
                 direction = (0, 1)
                 print('s')
+            elif 'e' in pressed_keys:
+                rot = self.cm.get_rotation(player)
+                rot.angle += math.pi / 12
+            elif 'q' in pressed_keys:
+                rot = self.cm.get_rotation(player)
+                rot.angle -= math.pi / 12
+            elif 'x' in pressed_keys:
+                scl = self.cm.get_scale(player)
+                scl.x += 0.1
+                scl.y += 0.1
+            elif 'z' in pressed_keys:
+                scl = self.cm.get_scale(player)
+                scl.x -= 0.1
+                scl.y -= 0.1
 
-            pos = self.cm.get_position(self.cm.get_indices()[0])
+            pos = self.cm.get_position(player)
             pos.x += direction[0]
             pos.y += direction[1]
 

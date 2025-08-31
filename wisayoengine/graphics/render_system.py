@@ -1,3 +1,7 @@
+from wisayoengine.core import Vector
+from wisayoengine.core.transform import Transform
+
+
 class RenderSystem:
     def __init__(self, renderer, width, height, component_manager):
         self.width = width
@@ -17,9 +21,21 @@ class RenderSystem:
                 row = 0
                 column = 0
                 for p in element['texture'].draw_pack:
+                    x = element['position'].x
+                    y = element['position'].y
+                    translated = Transform().get_translated(Vector(x, y))
+                    rotated = Transform().get_rotated(element['rotation'].angle)
+                    scaled = rotated.get_scaled(element['scale'])
+
+                    result = translated * rotated * scaled
+                    vertex = Vector(
+                        result.x_axis.x * (column-2) + result.x_axis.y * (row -2)+ result.origin.x,
+                        result.y_axis.x * (column-2) + result.y_axis.y * (row -2) + result.origin.y,
+                    )
+
                     self.renderer.draw(
-                        element['position'].x + column,
-                        element['position'].y + row,
+                        vertex.x + x,
+                        vertex.y + y,
                         p
                     )
 

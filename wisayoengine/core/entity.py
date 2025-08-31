@@ -1,4 +1,4 @@
-from wisayoengine.core.position import Position
+from wisayoengine.core.vector import Vector
 
 
 class Entity:
@@ -8,4 +8,4 @@ class Entity:
 class Lexeme:
     def __init__(self):
         self.name = Lexeme.__name__
-        self.position = Position(0, 0)
+        self.position = Vector(0, 0)

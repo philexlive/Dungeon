@@ -1,7 +1,9 @@
 import random
 
-from wisayoengine.core import Position
+from wisayoengine.core import Vector
+from wisayoengine.core.basic_components import PositionComponent, ScaleComponent
 from wisayoengine.core.entity import Entity
+from wisayoengine.core.rotation import Rotation
 from wisayoengine.graphics.camera import Camera
 from wisayoengine.graphics.texture import Texture
 
@@ -17,17 +19,34 @@ class ComponentManager:
         self.positions = []
         self.position_ids = {}
 
+        self.scales = []
+        self.scale_ids = {}
+
+        self.rotations = []
+        self.rotation_ids = {}
+
+        self.transforms = []
+        self.transform_ids = {}
+
         self.textures = []
         self.texture_ids = {}
 
         self.cameras = []
         self.camera_ids = {}
 
+
     def fetch_textures(self):
         get_texture = lambda k: self.textures[self.texture_ids[k]]
         get_position = lambda k: self.positions[self.position_ids[k]]
+        get_scale = lambda k: self.scales[self.scale_ids[k]]
+        get_rotation = lambda k: self.rotations[self.rotation_ids[k]]
         return [
-            {'texture': get_texture(k), 'position': get_position(k)}
+            {
+                'texture': get_texture(k),
+                'position': get_position(k),
+                'scale': get_scale(k),
+                'rotation': get_rotation(k)
+            }
             for k in self.texture_ids
         ]
 
@@ -52,6 +71,12 @@ class ComponentManager:
     def get_position(self, identity):
         return self.positions[self.position_ids[identity]]
 
+    def get_rotation(self, identity):
+        return self.rotations[self.rotation_ids[identity]]
+
+    def get_scale(self, identity):
+        return self.scales[self.scale_ids[identity]]
+
     def append(self, obj):
         def check_name(i=0):
             nonlocal new_entity
@@ -63,10 +88,18 @@ class ComponentManager:
         check_name()
 
         for component in obj:
-            if isinstance(component, Position):
+            if isinstance(component, PositionComponent):
                 l = len(self.positions)
                 self.positions.append(component)
                 self.position_ids[new_entity.identity] = l
+            if isinstance(component, ScaleComponent):
+                l = len(self.scales)
+                self.scales.append(component)
+                self.scale_ids[new_entity.identity] = l
+            if isinstance(component, Rotation):
+                l = len(self.rotations)
+                self.rotations.append(component)
+                self.rotation_ids[new_entity.identity] = l
             elif isinstance(component, Texture):
                 l = len(self.textures)
                 self.textures.append(component)
@@ -75,6 +108,7 @@ class ComponentManager:
                 l = len(self.cameras)
                 self.cameras.append(component)
                 self.camera_ids[new_entity.identity] = l
+
 
 
         self.entities.append(new_entity)
