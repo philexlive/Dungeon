@@ -2,11 +2,10 @@ import math
 import os
 from pynput import keyboard
 
-from wisayoengine.core.basic_components import PositionComponent, ScaleComponent
-from wisayoengine.core.component_manager import ComponentManager
+from wisayoengine.core.basic_components import Position, Scale
+import wisayoengine.core.component_manager as cm
 from wisayoengine.core.rotation import Rotation
 from wisayoengine.core.transform import Transform
-from wisayoengine.core.vector import Vector
 from wisayoengine.engine import Engine
 from wisayoengine.graphics.draw_pack import DrawPack
 from wisayoengine.graphics.renderer import Renderer
@@ -66,8 +65,6 @@ if __name__ == "__main__":
 
 
     # ________component_manager________
-    component_manager = ComponentManager()
-
     draw_pack = DrawPack([
         #  R    G    B    A
         (255,   0,   0,  25),
@@ -91,20 +88,16 @@ if __name__ == "__main__":
         (  0,   0, 255,  25),
     ])
     texture = Texture(draw_pack, 4, 4)
+    entity = cm.gen_go2d()
+    cm.expand_go(entity, texture)
 
-    component_manager.append(
-        [texture, PositionComponent(0, 0), Rotation(0), Transform(), ScaleComponent(1, 1)]
-    )
     # ________input________
     class InputApiImpl(InputApi):
-        def __init__(self):
-            self.cm = component_manager
-
         def on_input(self):
 
             direction = (0, 0)
 
-            player = self.cm.get_indices()[0]
+            player = cm.component_manager.get_indices()[0]
 
             if 'd' in pressed_keys:
                 direction = (1, 0)
@@ -116,21 +109,21 @@ if __name__ == "__main__":
                 direction = (0, 1)
                 print('s')
             elif 'e' in pressed_keys:
-                rot = self.cm.get_rotation(player)
+                rot = cm.component_manager.get_rotation(player)
                 rot.angle += math.pi / 12
             elif 'q' in pressed_keys:
-                rot = self.cm.get_rotation(player)
+                rot = cm.component_manager.get_rotation(player)
                 rot.angle -= math.pi / 12
             elif 'x' in pressed_keys:
-                scl = self.cm.get_scale(player)
+                scl = cm.component_manager.get_scale(player)
                 scl.x += 0.1
                 scl.y += 0.1
             elif 'z' in pressed_keys:
-                scl = self.cm.get_scale(player)
+                scl = cm.component_manager.get_scale(player)
                 scl.x -= 0.1
                 scl.y -= 0.1
 
-            pos = self.cm.get_position(player)
+            pos = cm.component_manager.get_position(player)
             pos.x += direction[0]
             pos.y += direction[1]
 
@@ -146,7 +139,7 @@ if __name__ == "__main__":
     input_impl = InputApiImpl()
     render_impl = CustomRendererImpl()
 
-    engine = Engine(render_impl, input_impl, component_manager)
+    engine = Engine(render_impl, input_impl)
     try:
         engine.run()
     except KeyboardInterrupt:

@@ -1,9 +1,10 @@
 import random
 
 from wisayoengine.core import Vector
-from wisayoengine.core.basic_components import PositionComponent, ScaleComponent
+from wisayoengine.core.basic_components import Position, Scale
 from wisayoengine.core.entity import Entity
 from wisayoengine.core.rotation import Rotation
+from wisayoengine.core.transform import Transform
 from wisayoengine.graphics.camera import Camera
 from wisayoengine.graphics.texture import Texture
 
@@ -11,7 +12,13 @@ from wisayoengine.graphics.texture import Texture
 class FindObjectError(Exception): pass
 class IdentityUniquenessError(Exception): pass
 
+
+class EntityError(Exception): pass
+
+
 class ComponentManager:
+    """Experimental component manager"""
+
     def __init__(self):
         self.entities = []
         self.entities_relation = []
@@ -50,8 +57,10 @@ class ComponentManager:
             for k in self.texture_ids
         ]
 
+
     def get_indices(self):
         return list(map(lambda entity: entity.identity, self.entities))
+
 
     def get_with_id(self, identity):
         for entity in self.entities:
@@ -68,6 +77,7 @@ class ComponentManager:
 
         raise FindObjectError
 
+
     def get_position(self, identity):
         return self.positions[self.position_ids[identity]]
 
@@ -77,40 +87,77 @@ class ComponentManager:
     def get_scale(self, identity):
         return self.scales[self.scale_ids[identity]]
 
-    def append(self, obj):
-        def check_name(i=0):
-            nonlocal new_entity
-            if new_entity.identity in map(lambda entity: entity.identity, self.entities):
-                new_entity.identity = f"{new_entity.identity}{i}"
-                check_name(i)
 
-        new_entity = Entity('Entity')
-        check_name()
+    def add_entity(self, obj):
+        #
+        # def check_name(i=0):
+        #     nonlocal new_entity
+        #     if new_entity.identity in map(lambda entity: entity.identity, self.entities):
+        #         new_entity.identity = f"{new_entity.identity}{i}"
+        #         check_name(i)
+
+        new_entity: Entity
+        for component in obj:
+            if isinstance(component, Entity):
+                new_entity = component
+                obj.remove(new_entity)
+                break
+        else: new_entity = Entity("entity")
+        # check_name()
 
         for component in obj:
-            if isinstance(component, PositionComponent):
-                l = len(self.positions)
-                self.positions.append(component)
-                self.position_ids[new_entity.identity] = l
-            if isinstance(component, ScaleComponent):
-                l = len(self.scales)
-                self.scales.append(component)
-                self.scale_ids[new_entity.identity] = l
-            if isinstance(component, Rotation):
-                l = len(self.rotations)
-                self.rotations.append(component)
-                self.rotation_ids[new_entity.identity] = l
-            elif isinstance(component, Texture):
-                l = len(self.textures)
-                self.textures.append(component)
-                self.texture_ids[new_entity.identity] = l
-            elif isinstance(component, Camera):
-                l = len(self.cameras)
-                self.cameras.append(component)
-                self.camera_ids[new_entity.identity] = l
-
-
+            self.expand_entity(component, new_entity)
 
         self.entities.append(new_entity)
 
-        print(f"New entity with name {new_entity.identity} just added")
+        return new_entity
+
+
+    def expand_entity(self, component, entity):
+        """Experimental append new object function.
+
+        Gets iterable of components, returns `identity`.
+        """
+        print(component)
+        # Helping function for inserting entity
+        def insert(comp_entry, comp_map):
+            self.add_comp(comp_entry, comp_map, component, entity)
+
+        if isinstance(component, Transform):
+            insert(self.transforms, self.transform_ids)
+        elif isinstance(component, Position):
+            insert(self.positions, self.position_ids)
+        elif isinstance(component, Scale):
+            insert(self.scales, self.scale_ids)
+        elif isinstance(component, Rotation):
+            insert(self.rotations, self.rotation_ids)
+        elif isinstance(component, Texture):
+            insert(self.textures, self.texture_ids)
+        elif isinstance(component, Camera):
+            insert(self.cameras, self.camera_ids)
+
+
+    @staticmethod
+    def add_comp(comp_entry, comp_map, component, entity):
+        l = len(comp_entry)
+        comp_entry.append(component)
+        comp_map[entity.identity] = l
+
+
+component_manager = ComponentManager()
+
+
+def gen_go():
+    return component_manager.add_entity([Entity])
+
+
+def gen_go2d():
+    go2d = [Entity('go2d'),
+            Transform(),
+            Position(0, 0),
+            Scale(0, 0),
+            Rotation(0)]
+    return component_manager.add_entity(go2d)
+
+def expand_go(component, entity):
+    component_manager.expand_entity(component, entity)

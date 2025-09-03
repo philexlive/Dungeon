@@ -2,10 +2,10 @@ import time
 
 from .graphics.render_system import RenderSystem
 from .io.input_system import InputSystem
-
+from .core.component_manager import component_manager
 
 class Engine:
-    def __init__(self, renderer, input_handler, component_manager):
+    def __init__(self, renderer, input_handler):
         self.input_system = InputSystem(input_handler)
 
         self._renderer = renderer
